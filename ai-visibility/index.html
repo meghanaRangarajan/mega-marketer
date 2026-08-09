@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Did AI Break the B2B Funnel or Just Make It Invisible?</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--white:#FFFFFF;--light-gray:#DEDEDE;--mid-gray:#BFBFBF;--blue:#2547A0;--blue-dark:#1a3578;--dark:#212020;--blue-glow:rgba(37,71,160,.15);--blue-light:rgba(37,71,160,.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Source Sans 3',sans-serif;color:var(--dark);background:var(--white);line-height:1.7;font-size:17px;overflow-x:hidden}
+.reveal{opacity:1;transform:translateY(0);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.12s}.rd2{transition-delay:.24s}.rd3{transition-delay:.36s}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:200;width:0%}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--light-gray);transition:box-shadow .3s;padding-top:env(safe-area-inset-top,0px)}
+nav.scrolled{box-shadow:0 2px 24px rgba(33,32,32,.08)}
+.nav-inner{max-width:90%;margin:0 auto;padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'Playfair Display',serif;font-weight:800;font-size:1.1rem;color:var(--blue)}
+.nav-links{display:flex;gap:26px}
+.nav-links a{text-decoration:none;color:var(--dark);font-size:.83rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--blue)}
+.container{max-width:90%;margin:0 auto;padding:0 0px}
+section{padding:50px 0}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:700;color:var(--dark);margin-bottom:20px;letter-spacing:-.02em;line-height:1.2}
+h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--dark);margin-bottom:12px}
+.lead{font-size:1.1rem;color:#555;margin-bottom:40px;line-height:1.8}
+.body-text{font-size:1.05rem;color:#555;line-height:1.8;margin-bottom:24px}
+.pullquote{border-left:4px solid var(--blue);padding:24px 0 24px 32px;margin:48px 0;font-family:'Playfair Display',serif;font-size:1.25rem;font-style:italic;color:var(--dark);line-height:1.5;max-width:72%}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 40px 80px;position:relative;overflow:hidden;background:linear-gradient(160deg,#000 0%,#0d0d0d 25%,#151520 50%,#121828 75%,#0a1235 100%)}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,71,160,.2) 0%,transparent 70%);animation:float 8s ease-in-out infinite}
+.hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(37,71,160,.12) 0%,transparent 70%);animation:float 10s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-30px) scale(1.05)}}
+.hero-content{max-width:80%;text-align:center;position:relative;z-index:1}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,5.5vw,4.2rem);font-weight:800;line-height:1.12;color:var(--white);margin-bottom:24px;letter-spacing:-.03em;animation:fadeUp 1s ease-out .2s both}
+h1 em{color:#6b8cdf;font-style:italic}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-sub{font-family:'Playfair Display',serif;font-size:1.25rem;font-style:italic;color:rgba(255,255,255,.45);max-width:63%;margin:0 auto 40px;animation:fadeUp 1s ease-out .4s both}
+.reading-meta{display:flex;gap:20px;justify-content:center;font-size:.84rem;color:rgba(255,255,255,.35);animation:fadeUp 1s ease-out .3s both}
+.reading-meta span{display:flex;align-items:center;gap:6px}
+.scroll-ind{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);animation:bounce 2s ease-in-out infinite}
+.scroll-ind svg{width:24px;height:24px;stroke:rgba(255,255,255,.35)}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:48px 0}
+.stat-card{background:var(--white);border-radius:16px;padding:36px 32px;border:1px solid var(--light-gray);transition:all .4s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.stat-card:hover::before{transform:scaleX(1)}
+.stat-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(37,71,160,.1)}
+.stat-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:800;color:var(--blue);line-height:1;margin-bottom:8px}
+.stat-label{font-size:.92rem;font-weight:600;color:var(--dark);margin-bottom:6px}
+.stat-desc{font-size:.84rem;color:#777;line-height:1.5}
+.stat-src{font-size:.72rem;color:var(--mid-gray);margin-top:10px;font-style:italic}
+
+/* FUNNEL */
+.funnel-section{background:linear-gradient(180deg,#f4f6fb 0%,var(--white) 100%);padding:100px 0}
+.funnel-grid{display:grid;grid-template-columns:1fr 60px 1fr;gap:24px;align-items:center;margin:48px 0}
+.funnel-col{background:var(--white);border-radius:16px;padding:36px 32px;box-shadow:0 4px 32px rgba(33,32,32,.06);border:1px solid var(--light-gray)}
+.funnel-col h3{font-size:1.1rem;text-align:center;margin-bottom:20px}
+.funnel-stages{display:flex;flex-direction:column}
+.funnel-stage{text-align:center;padding:16px 12px;font-weight:600;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--white);transition:transform .3s}
+.funnel-stage:hover{transform:scale(1.02)}
+.fs1{background:var(--blue);border-radius:8px 8px 0 0}.fs2{background:#3a5cb5}.fs3{background:#4f71ca}.fs4{background:var(--dark);border-radius:0 0 8px 8px}
+.funnel-note{text-align:center;padding:12px;font-size:.78rem;color:#999;margin-top:12px;line-height:1.5}
+.arrow-col{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--mid-gray);font-size:.7rem;font-weight:600;letter-spacing:.1em}
+.arrow-col svg{width:32px;height:32px;stroke:var(--blue);animation:pulseR 2s ease-in-out infinite}
+@keyframes pulseR{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(6px);opacity:1}}
+.inv-col{border-color:var(--blue);background:rgba(37,71,160,.04)}
+.inv-nodes{display:flex;flex-direction:column;gap:12px}
+.inv-node{display:flex;align-items:center;gap:12px;padding:13px 16px;background:rgba(37,71,160,.06);border-radius:10px;border-left:3px solid var(--blue);transition:all .3s}
+.inv-node:hover{background:rgba(37,71,160,.12);transform:translateX(4px)}
+.inv-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.inv-node span{font-size:.85rem;font-weight:500;color:var(--dark)}
+
+/* COMPARE SECTION */
+.cmp-section{background:var(--dark);color:var(--white);padding:100px 0 30px;position:relative;overflow:hidden}
+.cmp-section::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,71,160,.25) 0%,transparent 70%)}
+.cmp-section h2{color:var(--white)}.cmp-section .lead{color:var(--mid-gray)}
+.cmp-table{width:100%;border-collapse:collapse;margin:40px 0}
+.cmp-table th{padding:16px 28px;text-align:center;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;border-bottom:2px solid rgba(255,255,255,.15)}
+.cmp-table th:first-child{color:var(--mid-gray)}.cmp-table th:last-child{color:#6b8cdf}
+.cmp-table td{padding:16px 28px;text-align:center;font-size:.95rem;border-bottom:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.cmp-table tr:hover td{background:rgba(255,255,255,.03)}
+.cmp-table td:last-child{color:var(--white);font-weight:600}
+
+/* CONSENSUS ORBIT */
+.consensus-wrap{position:relative;width:580px;height:580px;margin:48px auto}
+.consensus-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;background:var(--white);border:3px solid var(--dark);display:flex;align-items:center;justify-content:center;color:var(--dark);font-family:'Playfair Display',serif;font-weight:700;font-size:.85rem;text-align:center;line-height:1.3;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:2}
+.cn-fill{background:var(--blue)!important;color:var(--white)!important;border-color:var(--blue)!important;box-shadow:0 4px 16px rgba(37,71,160,.25)}
+.cn-out{background:var(--white)!important;color:var(--dark)!important;border:2px solid var(--dark)!important}
+.consensus-ring{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;border:0px dashed rgba(255,255,255,.1);animation:spin 50s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.c-node{position:absolute;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:var(--white);text-align:center;line-height:1.2;transition:all .3s;cursor:default;animation:cspin 50s linear infinite}
+@keyframes cspin{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+.c-node:hover{background:rgba(37,71,160,.4);border-color:#6b8cdf;transform:scale(1.15)!important}
+
+/* TRUST ORBIT */
+.orbit-section{padding:100px 0;background:#f7f8fc}
+.orbit-wrap{position:relative;width:480px;height:480px;margin:48px auto}
+.orbit-ring{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;border:0px solid var(--light-gray)}
+.orbit-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;background:var(--white);border:3px solid var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:.88rem;text-align:center;line-height:1.3;color:var(--dark);z-index:2;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.sig-node{position:absolute;width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;text-align:center;line-height:1.2;transition:all .3s;cursor:default;z-index:3}
+.sig-node:hover{transform:scale(1.12)!important}
+.sn-fill{background:var(--blue);color:var(--white);box-shadow:0 4px 16px rgba(37,71,160,.25)}
+.sn-out{background:var(--white);color:var(--dark);border:2px solid var(--dark)}
+
+/* MOAT */
+.moat-grid{display:grid;grid-template-columns:repeat(2,2fr);gap:24px;margin:48px 0}
+.moat-card{background:var(--white);border-radius:16px;padding:46px 24px;border:1px solid var(--light-gray);transition:all .4s}
+.moat-card:hover{border-color:var(--blue);box-shadow:0 8px 32px rgba(37,71,160,.1);transform:translateY(-4px)}
+.moat-tag{display:inline-block;padding:4px 14px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;border-radius:100px;margin-bottom:12px}
+.tag-owned{background:var(--blue);color:var(--white)}.tag-third{background:var(--light-gray);color:var(--dark)}
+.moat-card h4{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:600;margin-bottom:8px;color:var(--dark)}
+.moat-card p{font-size:.86rem;color:#666;line-height:1.6}
+
+/* CHANNELS */
+.ch-section{padding:100px 0;background:var(--dark);color:var(--white)}
+.ch-section h2{color:var(--white)}.ch-section .lead{color:var(--mid-gray)}
+.ch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin:48px 0}
+.ch-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px 28px;text-align:center;transition:all .3s}
+.ch-card:hover{background:rgba(37,71,160,.2);border-color:var(--blue);transform:translateY(-4px)}
+.ch-icon{font-size:2.2rem;margin-bottom:16px}
+.ch-card h4{font-family:'Playfair Display',serif;font-size:1.08rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.ch-sub{font-size:.8rem;color:#6b8cdf;font-weight:600;margin-bottom:12px}
+.ch-card p{font-size:.86rem;color:rgba(255,255,255,.6);line-height:1.6;text-align:left}
+
+/* METRICS */
+.met-shift{display:grid;grid-template-columns:1fr 60px 1fr;gap:24px;align-items:stretch;margin:48px 0}
+.met-box{border-radius:16px;padding:36px 32px}
+.met-old{background:#f2f2f2;border:1px solid var(--light-gray)}
+.met-new{background:var(--blue);color:var(--white);box-shadow:0 8px 32px rgba(37,71,160,.2)}
+.met-box h4{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:16px;text-align:center}
+.met-list{font-size:.9rem;line-height:2.2}
+.met-arrow{display:flex;align-items:center;justify-content:center}
+.met-arrow svg{width:36px;height:36px;stroke:var(--blue)}
+/* ICEBERG VIZ */
+.iceberg{position:relative;max-width:80%;margin:0 auto}
+.iceberg-water-label{text-align:center;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mid-gray);margin-bottom:8px}
+.iceberg-above{display:flex;align-items:center;gap:32px;padding:24px 0 20px;min-height:140px}
+.iceberg-shape-above{flex:0 0 180px;height:120px;background:linear-gradient(180deg,#e8eaed 0%,#d4d7dc 100%);clip-path:polygon(30% 0%,70% 0%,85% 100%,15% 100%);display:flex;align-items:center;justify-content:center;position:relative}
+.iceberg-title-above{font-family:'Playfair Display',serif;font-weight:700;font-size:.9rem;color:#666;margin-top:20px}
+.iceberg-items-above{display:flex;flex-wrap:wrap;gap:8px 16px}
+.iceberg-waterline{height:3px;background:linear-gradient(90deg,transparent,rgba(37,71,160,.3),var(--blue),rgba(37,71,160,.3),transparent);position:relative;margin:0 -40px}
+.iceberg-waterline::before{content:'';position:absolute;top:-8px;left:0;right:0;height:20px;background:linear-gradient(180deg,transparent,rgba(37,71,160,.04));pointer-events:none}
+.iceberg-below{display:flex;align-items:flex-start;gap:32px;padding:24px 0;min-height:260px;background:linear-gradient(180deg,rgba(37,71,160,.03) 0%,rgba(37,71,160,.1) 100%);margin:0 -40px;padding:32px 40px;border-radius:0 0 20px 20px}
+.iceberg-shape-below{flex:0 0 220px;height:240px;background:linear-gradient(180deg,var(--blue) 0%,var(--blue-dark) 60%,#0f1f4a 100%);clip-path:polygon(10% 0%,90% 0%,70% 40%,80% 70%,55% 100%,35% 85%,25% 60%,15% 30%);display:flex;align-items:flex-start;justify-content:center;padding-top:32px;position:relative;opacity:.9}
+.iceberg-title-below{font-family:'Playfair Display',serif;font-weight:700;font-size:.9rem;color:var(--white)}
+.iceberg-items-below{display:flex;flex-direction:column;gap:10px;padding-top:8px}
+
+.ib-item{display:flex;align-items:center;gap:10px;font-size:.9rem;line-height:1.4}
+.ib-visible{color:#777}
+.ib-invisible{color:var(--dark);font-weight:500}
+.ib-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ib-dot-gray{background:var(--mid-gray)}
+.ib-dot-blue{background:var(--blue);box-shadow:0 0 8px rgba(37,71,160,.4)}
+
+.ib-new-metrics{margin-top:24px;background:var(--blue);border-radius:12px;padding:20px 28px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
+.ib-new-metrics h4{font-family:'Playfair Display',serif;color:var(--white);font-size:1rem;margin:0;flex:0 0 100%}
+.ib-new-metrics span{font-size:.9rem;color:rgba(255,255,255,.85)}
+.silver{background:rgba(37,71,160,.06);border:1px solid rgba(37,71,160,.15);border-radius:14px;padding:28px 32px;margin-top:40px;max-width:63%}
+.silver h4{font-family:'Playfair Display',serif;color:var(--blue);font-size:1.05rem;margin-bottom:8px}
+.silver p{font-size:.95rem;color:#555;line-height:1.7}
+.aeo-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:28px 0}
+.aeo-item{text-align:center;padding:18px 12px;background:var(--white);border-radius:12px;border:1px solid var(--light-gray);font-weight:600;font-size:.86rem;transition:all .3s}
+.aeo-item:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
+.aeo-item small{display:block;font-weight:400;font-size:.7rem;color:var(--mid-gray);margin-top:4px}
+.pq-center{border-left:none;text-align:center;padding-left:0;color:var(--blue);max-width:62%;margin:48px auto}
+
+/* CONCLUSION */
+.conclusion{text-align:left;padding:30px 0 60px;background:var(--dark);color:var(--white);position:relative;overflow:hidden}
+.conclusion::before{content:'';position:absolute;bottom:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,71,160,.25) 0%,transparent 70%)}
+.conclusion h2{color:var(--white)}
+.conclusion p{font-size:1.05rem;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:20px}
+.conclusion strong{color:var(--white)}
+.cta-box{display:inline-block;margin-top:24px;padding:20px 40px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:var(--white);font-family:'Playfair Display',serif;font-size:1.15rem;font-style:italic;border-radius:12px;box-shadow:0 8px 32px rgba(37,71,160,.2)}
+.author-bar{border-top:1px solid var(--light-gray);padding:48px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+.author-bar h4{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:4px}
+.author-bar p{font-size:.88rem;color:#777;font-style:italic}
+.author-bar a{color:var(--blue);text-decoration:none;font-size:.85rem;font-weight:500}
+.footer{text-align:center;padding:32px;background:var(--dark);color:var(--mid-gray);font-size:.82rem}
+.footer span{color:var(--blue);font-weight:600}
+
+/* ACTION PLAN TABLE */
+.action-section{padding:80px 0 40px}
+.action-section h2{color:var(--dark);margin-bottom:8px}
+.action-section .lead{margin-bottom:36px}
+.action-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 32px;border-radius:16px;border:1px solid var(--light-gray);box-shadow:0 4px 32px rgba(33,32,32,.06)}
+.action-table{width:100%;border-collapse:collapse;min-width:900px}
+.action-table thead th{padding:16px 20px;font-family:'Playfair Display',serif;font-size:.82rem;font-weight:700;text-align:left;background:var(--dark);color:var(--white);letter-spacing:.04em;border-bottom:2px solid var(--blue)}
+.action-table thead th:first-child{border-radius:0;width:44px;text-align:center}
+.action-table tbody td{padding:16px 20px;font-size:.88rem;color:#444;line-height:1.6;border-bottom:1px solid var(--light-gray);vertical-align:top}
+.action-table tbody tr{transition:background .2s}
+.action-table tbody tr:hover{background:var(--blue-light)}
+.action-table tbody tr:last-child td{border-bottom:none}
+.action-table tbody td:first-child{text-align:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--blue);font-size:1rem}
+.action-table .col-action{font-weight:600;color:var(--dark)}
+.action-table .col-details{max-width:260px;color:#666;font-size:.84rem}
+.action-table .col-why{max-width:240px;font-size:.84rem;color:#666;font-style:italic}
+.tf-badge{display:inline-block;padding:3px 12px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.tf-week{background:rgba(220,53,69,.1);color:#dc3545}
+.tf-month{background:rgba(253,126,20,.1);color:#e67e00}
+.tf-quarter{background:rgba(37,71,160,.1);color:var(--blue)}
+.tf-long{background:rgba(37,71,160,.06);color:#5a6f8a}
+.pr-badge{display:inline-block;padding:3px 12px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.pr-critical{background:#dc3545;color:#fff}
+.pr-high{background:#e67e00;color:#fff}
+.pr-medium{background:var(--blue);color:#fff}
+.ef-badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--light-gray);color:#777}
+.action-key{display:flex;flex-wrap:wrap;gap:16px 32px;margin-top:20px;padding:20px 28px;background:rgba(37,71,160,.04);border-radius:12px;font-size:.82rem;color:#666}
+.action-key span{display:flex;align-items:center;gap:8px}
+
+/* ===== TABLET (max-width: 900px) ===== */
+@media(max-width:900px){
+  .stat-row,.moat-grid,.ch-grid{grid-template-columns:1fr 1fr}
+  .funnel-grid,.met-shift{grid-template-columns:1fr}
+  .arrow-col,.met-arrow{flex-direction:row;justify-content:center;padding:16px 0}
+  .arrow-col svg,.met-arrow svg{transform:rotate(90deg)}
+  .timeline{flex-direction:column;gap:0}
+  .timeline::before{display:none}
+  .tl-spacer{width:3px;height:40px}
+  .orbit-wrap{width:380px;height:380px}
+  .orbit-center{width:110px;height:110px;font-size:.78rem}
+  .sig-node{width:70px;height:70px;font-size:.6rem}
+  .consensus-wrap{width:380px;height:380px}
+  .consensus-center{width:120px;height:120px;font-size:.82rem}
+  .c-node{width:90px;height:90px;font-size:.58rem}
+  .aeo-bar{grid-template-columns:repeat(2,1fr)}
+  .measure-grid{grid-template-columns:1fr!important}
+  .iceberg-above,.iceberg-below{flex-direction:column;align-items:flex-start;gap:20px}
+  .iceberg-shape-above{flex:none;width:140px;height:90px}
+  .iceberg-shape-below{flex:none;width:160px;height:180px}
+  .iceberg-below{margin:0 -24px;padding:24px}
+  .nav-links{display:none}
+  .container{padding:0 24px}
+  .cmp-table th,.cmp-table td{padding:12px 14px;font-size:.83rem}
+  .author-bar{flex-direction:column;text-align:center}
+  .action-table{min-width:800px}
+  .action-table thead th,.action-table tbody td{padding:12px 14px;font-size:.82rem}
+}
+
+/* ===== MOBILE (max-width: 600px) ===== */
+@media(max-width:600px){
+  body{font-size:15px}
+
+  /* Nav */
+  .nav-inner{padding:10px 16px;max-width:100%}
+  .nav-brand{font-size:.82rem}
+  .nav-links{display:none}
+
+  /* Container & Section spacing */
+  .container{padding:0 16px;max-width:100%}
+  section{padding:36px 0}
+
+  /* Override percentage max-widths for mobile */
+  .hero-content{max-width:100%}
+  .hero-sub{max-width:90%}
+  .pullquote{max-width:100%}
+  .iceberg{max-width:100%}
+  .silver{max-width:100%}
+  .pq-center{max-width:90%}
+  .consensus-desc{max-width:90%!important;font-size:.84rem!important}
+
+  /* Hero */
+  .hero{min-height:90vh;min-height:90dvh;padding:80px 20px 50px;display:flex;align-items:center;justify-content:center}
+  .hero::before{width:300px;height:300px;top:-100px;right:-100px}
+  .hero::after{width:200px;height:200px;bottom:-80px;left:-60px}
+  h1{font-size:clamp(1.8rem,7vw,2.6rem)}
+  .hero-sub{font-size:1rem;margin-bottom:28px}
+  .reading-meta{flex-direction:column;gap:8px;font-size:.78rem}
+  .scroll-ind{bottom:20px}
+
+  /* Typography */
+  h2{font-size:clamp(1.5rem,6vw,2rem);margin-bottom:16px}
+  h3{font-size:1.15rem}
+  .lead{font-size:.95rem;margin-bottom:28px}
+  .body-text{font-size:.95rem;margin-bottom:18px}
+  .pullquote{font-size:1.05rem;padding:18px 0 18px 20px;margin:32px 0}
+  .pq-center{padding-left:0}
+
+  /* Stat cards - single column */
+  .stat-row{grid-template-columns:1fr;gap:16px;margin:32px 0}
+  .stat-card{padding:24px 20px}
+  .stat-num{font-size:2.4rem}
+
+  /* Funnel grid */
+  .funnel-section{padding:60px 0}
+  .funnel-grid{grid-template-columns:1fr;gap:16px;margin:32px 0}
+  .funnel-col{padding:24px 20px}
+  .arrow-col{flex-direction:row;justify-content:center;padding:12px 0}
+  .arrow-col svg{transform:rotate(90deg);width:28px;height:28px}
+
+  /* Compare table - make it scrollable */
+  .cmp-section{padding:60px 0}
+  .cmp-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:24px 0}
+  .cmp-table th,.cmp-table td{padding:10px 16px;font-size:.8rem;white-space:nowrap}
+
+  /* Consensus orbit - replace with grid on mobile */
+  .consensus-wrap{width:100%;height:auto;margin:32px auto;display:flex;flex-direction:column;align-items:center;gap:20px}
+  .consensus-center{position:relative;top:auto;left:auto;transform:none;width:auto;height:auto;border-radius:0;background:none;border:none;box-shadow:none;font-size:1.3rem;color:var(--white);letter-spacing:.08em;text-transform:uppercase}
+  .consensus-ring{position:relative;width:100%;height:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 8px;animation:none;border:none}
+  .c-node{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;padding:12px 8px;border-radius:12px;font-size:.72rem;animation:none}
+
+  /* Trust orbit - replace with grid on mobile */
+  .orbit-section{padding:60px 0}
+  .orbit-wrap{width:100%;height:auto;margin:32px auto;display:flex;flex-direction:column;align-items:center;gap:20px}
+  .orbit-center{position:relative;top:auto;left:auto;transform:none;width:100px;height:100px;font-size:.68rem}
+  .orbit-ring{position:relative;width:100%;height:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 8px;border:none}
+  .sig-node{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;padding:12px 8px;border-radius:12px;font-size:.72rem}
+
+  /* Moat grid - single column */
+  .moat-grid{grid-template-columns:1fr;gap:16px;margin:32px 0}
+  .moat-card{padding:24px 18px}
+
+  /* Channel cards - single column */
+  .ch-section{padding:60px 0}
+  .ch-grid{grid-template-columns:1fr;gap:16px;margin:32px 0}
+  .ch-card{padding:24px 20px}
+  .ch-card p{font-size:.84rem}
+  .ch-icon{font-size:1.8rem;margin-bottom:10px}
+
+  /* Metrics shift */
+  .met-shift{grid-template-columns:1fr;gap:16px;margin:32px 0}
+  .met-box{padding:24px 20px}
+  .met-arrow{flex-direction:row;justify-content:center;padding:12px 0}
+  .met-arrow svg{transform:rotate(90deg);width:28px;height:28px}
+
+  /* Iceberg */
+  .iceberg-above,.iceberg-below{flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .iceberg-shape-above{flex:none;width:120px;height:80px}
+  .iceberg-shape-below{flex:none;width:140px;height:150px}
+  .iceberg-items-above{justify-content:center}
+  .iceberg-items-below{align-items:flex-start;width:100%}
+  .iceberg-below{margin:0 -16px;padding:20px 16px}
+  .iceberg-waterline{margin:0 -16px}
+  .ib-item{font-size:.82rem}
+  .ib-new-metrics{padding:16px 18px;gap:6px 16px}
+  .ib-new-metrics h4{font-size:.9rem}
+  .ib-new-metrics span{font-size:.82rem}
+
+  /* AEO bar - single column */
+  .aeo-bar{grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+  .aeo-item{padding:14px 8px;font-size:.78rem}
+  .aeo-item small{font-size:.65rem}
+
+  /* Silver box */
+  .silver{padding:20px;margin-top:28px}
+  .silver h4{font-size:.95rem}
+  .silver p{font-size:.88rem}
+
+  /* Conclusion */
+  .conclusion{padding:60px 0 40px}
+  .conclusion p{font-size:.95rem;color:rgba(255,255,255,.7)}
+  .cta-box{padding:16px 28px;font-size:1rem}
+
+  /* Author & footer */
+  .author-bar{padding:32px 0;flex-direction:column;text-align:center;gap:16px}
+  .author-bar h4{font-size:1.1rem}
+  .author-bar p{font-size:.82rem}
+  .footer{padding:24px 16px}
+
+  /* Disable hover transforms on mobile (causes jankiness) */
+  .stat-card:hover,.moat-card:hover,.ch-card:hover,.inv-node:hover,.aeo-item:hover{transform:none}
+  .desktop-br{display:none}
+
+  /* Action plan table */
+  .action-section{padding:48px 0 24px}
+  .action-table-wrap{border-radius:12px}
+  .action-table{min-width:700px}
+  .action-table thead th,.action-table tbody td{padding:10px 12px;font-size:.78rem}
+  .action-key{flex-direction:column;gap:10px;font-size:.78rem}
+}
+</style>
+<style>
+  /* constant Mega Marketing top bar (consistent with homepage) */
+  .nav-inner .nav-brand{color:#212020 !important;text-transform:none !important;letter-spacing:-.5px;text-decoration:none;
+    font-family:'Playfair Display',serif;font-weight:800;font-size:22px;display:inline-flex;align-items:baseline;}
+  .nav-inner .nav-brand .mm-b{color:#2547A0;}
+  .nav-inner .nav-brand .mm-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2547A0;margin-left:3px;}
+  .nav-links a.cta{background:#2547A0;color:#fff !important;padding:9px 20px;border-radius:100px;font-weight:600;}
+  .nav-links a.cta:hover{background:#1A3578;color:#fff !important;}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="nav"><div class="nav-inner">
+  <a href="/" class="nav-brand"><span class="mm-b">MEG</span>a Marketing<span class="mm-dot"></span></a>
+  <div class="nav-links">
+    <a href="/#ai">AI for Marketing</a>
+    <a href="/#insights">Insights</a>
+    <a href="/#about">About</a>
+    <a href="/#contact" class="cta">Contact</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Did AI Break the B2B Funnel<br class="desktop-br"> or Just Make It <em>Invisible?</em></h1>
+    <p class="hero-sub">"Zero-click" search is disrupting inbound B2B marketing</p>
+    <div class="reading-meta">
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 8 min read</span>
+      <span>By Meghana Rangarajan</span>
+    </div>
+  </div>
+  <div class="scroll-ind"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+</section>
+
+<!-- INTRO + STATS -->
+<section id="invisible-funnel">
+  <div class="container">
+    <div class="reveal">
+      <h2>The Funnel Has Gone Invisible</h2>
+      <p class="lead">B2B marketers are witnessing a fundamental shift in how buyers discover and engage with content. The familiar marketing funnel&mdash;where prospects move from awareness to consideration to decision through trackable touchpoints&mdash;seems to be vanishing.</p>
+      <p class="body-text">AI-driven search hasn't destroyed the B2B funnel so much as made large parts of it invisible. In this new landscape, success relies on adapting to <strong>reputation economics</strong>, grappling with <strong>zero-click journeys</strong> and lost attribution, and building a <strong>durable content moat</strong> rooted in trust and unique insights.</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card reveal"><div class="stat-num">80%</div><div class="stat-label">Rely on Answer Engines</div><div class="stat-desc">Nearly 80% of buyers rely on answer engines for at least half of their decision-making process.</div><div class="stat-src">&mdash; Profound</div></div>
+      <div class="stat-card reveal rd1"><div class="stat-num">85%</div><div class="stat-label">Buy from "Day One" List</div><div class="stat-desc">85% of B2B buyers ultimately purchase from a vendor on their radar from the very start.</div><div class="stat-src">&mdash; Bain &amp; Company</div></div>
+      <div class="stat-card reveal rd2"><div class="stat-num" style="font-size:2.6rem">30%&darr;</div><div class="stat-label">Website Traffic Decline</div><div class="stat-desc">In some B2B search categories, website traffic has dropped as AI answers replace clicks.</div><div class="stat-src">&mdash; Bain &amp; Company</div></div>
+    </div>
+    <div class="reveal" style="margin-top:48px">
+      <p class="body-text">According to Profound, an AI visibility platform optimising brand presence, nearly 80% of buyers rely on answer engines for at least half of their decision-making process. This leads to an "invisible funnel" where most of the early touchpoints and research steps leave no trace in your web analytics. When the first interaction seen is a demo request or contact form, it might feel like leads are appearing from thin air, the result of an invisible funnel that started and progressed entirely within AI-driven channels.</p>
+      <p class="body-text">Buyers emerging from this invisible funnel may already be far down the path to a decision. Bain &amp; Company reports that 85% of B2B buyers ultimately purchase from one of the vendors they had on their radar from the very start of their research. If AI assistants are front-loading that research, buyers might form a "day one list" without ever engaging with broader content or sales outreach. This makes it harder for marketers to insert new brands or influence consideration mid-funnel. <strong>If you weren't in that initial AI-fed answer, you might not exist in the buyer's mind at all.</strong></p>
+    </div>
+  </div>
+  <div class="reveal" style="margin:48px 0;text-align:center">
+  	<img src="assets/2.png" alt="Traditional funnel cracking vs AI search engines creating invisible zero-click journeys" style="width:100%;max-width:1000px;border-radius:16px">
+  </div>
+  </div>
+
+<!-- REPUTATION ECONOMICS -->
+<div class="cmp-section" id="reputation">
+  <div class="container">
+    <div class="reveal">
+      <h2>From SEO to Reputation Economics</h2>
+      <p class="lead">AI systems don’t present ten blue links; they deliver one synthesised answer drawn from multiple sources. There is no first page of results to dominate. You’re either in the AI’s answer box, or you’re invisible. This paradigm shift is what is called “reputation economics” over traditional SEO tactics. In essence, AI search algorithms curate sources based on trust, semantic authority, and consensus rather than just keyword relevance. A brand’s overall digital reputation, the consistency of its message, the credibility of its content, and the frequency of third-party mentions, becomes the deciding factors in whether the AI will trust and cite it. In Simple words -</p>
+    <div class="pullquote reveal" style="border-left-color:rgba(255,255,255,.4);color:var(--white)">A well-known brand with strong thought leadership and widespread third-party mentions stands a far better chance of being referenced by AI, whereas a little-known website that merely nailed its SEO keywords may be ignored.</div>
+    </div>
+    <div class="reveal">
+      <table class="cmp-table">
+        <thead><tr><th>Traditional SEO</th><th>Reputation Economics</th></tr></thead>
+        <tbody>
+          <tr><td>Optimizes for Keywords &amp; Clicks</td><td>Optimizes for Trust &amp; Citations</td></tr>
+          <tr><td>Focus on Traffic Volume</td><td>Focus on Share of Voice</td></tr>
+          <tr><td>Goal: Rank #1 on Page 1</td><td>Goal: Be Cited in the Answer</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.92rem;color:var(--mid-gray);line-height:1.7;margin-top:24px">A brand's digital reputation and frequency of third-party mentions are now the deciding factors for AI visibility. The consistency of its message, the credibility of its content, and the frequency of third-party mentions becomes the deciding factor in whether AI will trust and cite it.</p>
+    </div>
+
+    <div class="reveal" style="margin-top:72px">
+      <h3 style="text-align:center;color:var(--white);font-size:1.4rem;margin-bottom:8px">AI Looks for Distributed Consensus</h3>
+      <p class="consensus-desc" style="text-align:center;color:var(--mid-gray);max-width:44%;margin:0 auto;font-size:.9rem">If thousands of independent sources describe your company as the best option, the AI internalises that association as truth.</p>
+    </div>
+    <div class="consensus-wrap reveal">
+      <div class="consensus-center">MARKETING<br>STRATEGY</div>
+      <div class="consensus-ring">
+        <div class="c-node cn-out" data-cangle="0">Expert Commentary</div>
+        <div class="c-node cn-fill" data-cangle="36">Public Relations</div>
+        <div class="c-node cn-out" data-cangle="72">Industry Analysts</div>
+        <div class="c-node cn-fill" data-cangle="108">Guest Contributions</div>
+        <div class="c-node cn-out" data-cangle="144">Executive Visibility</div>
+        <div class="c-node cn-fill" data-cangle="180">Influencer Partnerships</div>
+        <div class="c-node cn-out" data-cangle="216">Owned Website</div>
+        <div class="c-node cn-fill" data-cangle="252">User Reviews</div>
+        <div class="c-node cn-out" data-cangle="288">Social Media</div>
+        <div class="c-node cn-fill" data-cangle="324">Podcasts</div>
+      </div>
+    </div>
+
+    <div class="pullquote reveal" style="border-left-color:rgba(255,255,255,.4);color:var(--white);margin-top:24px">The new marketing imperative is not just to win over human buyers, but to educate AI about your brand's credibility and value.</div>
+  </div>
+</div>
+  <!-- CONTENT MOAT -->
+<section id="content-moat">
+  <div class="container">
+    <div class="reveal">
+      <h2>Building a Durable Content Moat</h2>
+      <p class="lead">If AI is going to curate only a few trusted voices on any given topic, you want to be one of those voices. That requires owning a content moat, a body of unique, authoritative content that others cannot easily replicate or replace. High-quality content doesn't just attract prospects; it signals expertise to AI models, making it more likely your insights get included. Create content that offers knowledge only you can provide.</p>
+    </div>
+    <div class="reveal" style="margin:48px 0;text-align:center">
+      <img src="assets/1.png" alt="Build your Content Moat" style="width:100%;max-width:940px;border-radius:16px;box-shadow:0 8px 40px rgba(33,32,32,.1)">
+    <div class="moat-grid">
+      <div class="moat-card reveal"><div class="moat-tag tag-owned">Owned Content</div><h4>Data &amp; Research</h4><p>Unique case studies, quarterly reports, and proprietary data analysis that AI must cite as a primary source.</p></div>
+      <div class="moat-card reveal rd1"><div class="moat-tag tag-owned">Owned Content</div><h4>Executive Thought Leadership</h4><p>Perspectives from your C-suite and co-created content with industry experts. Independent validation strengthens the moat.</p></div>
+      <div class="moat-card reveal rd2"><div class="moat-tag tag-owned">Owned Content</div><h4>Documentation &amp; Tutorials</h4><p>"How-to" guides produce precise, quotable steps that AI loves to reuse for functional queries.</p></div>
+      <div class="moat-card reveal"><div class="moat-tag tag-third">Third-Party</div><h4>User Review Aggregators</h4><p>AI surfaces "what users say" by summarizing common pros and cons. Steady high-quality reviews increase your chances of appearing in AI-generated shortlists.</p></div>
+      <div class="moat-card reveal rd1"><div class="moat-tag tag-third">Third-Party</div><h4>Editorial Mentions &amp; PR</h4><p>Earned media is evidence. AI leans on high-trust sources. Strong PR gives AI quotable, verifiable claims about differentiation.</p></div>
+      <div class="moat-card reveal rd2"><div class="moat-tag tag-third">Third-Party</div><h4>Category Rankings &amp; Influencer Content</h4><p>List-style rankings on G2/TrustRadius are easy for AI to parse. Influencer content creates additional independent descriptions strengthening the consensus signal.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNELS -->
+<div class="ch-section" id="channels">
+  <div class="container">
+    <div class="reveal">
+      <h2>Strategic Channels for AI Visibility</h2>
+      <p class="lead">The convergence of messaging across all these channels increases "entity authority"&mdash;the likelihood that a brand is recognised as a legitimate actor in a category.</p>
+    </div>
+    <div class="ch-grid">
+      <div class="ch-card reveal"><div class="ch-icon">&#128172;</div><h4>Thought Leadership &amp; Product Documentation</h4><div class="ch-sub">The Precision Signal</div><p>High-quality research, case studies, and proprietary insights signal expertise to AI systems. Structured documentation and tutorials provide precise, reusable explanations that increase citation likelihood in evaluation and implementation queries.</p></div>
+      <div class="ch-card reveal"><div class="ch-icon">&#128172;</div><h4>Editorial Mentions &amp; Expert Commentary</h4><div class="ch-sub">The Credibility Signal</div><p>Earned media and expert commentary act as distributed validation layers for AI models. High-trust editorial coverage and quotable insights reinforce differentiation and increase inclusion in “top vendor” and comparison responses.</p></div>
+      <div class="ch-card reveal"><div class="ch-icon">&#128172;</div><h4>Reddit &amp; LinkedIn</h4><div class="ch-sub">The Human Signal</div><p>AI prioritizes these platforms because they represent authentic, practitioner-led conversations. Reddit has become one of the most cited domains on LLMs. LinkedIn captures how practitioners talk about problems in natural language, aligning with how users prompt AI tools.</p></div>
+      <div class="ch-card reveal"><div class="ch-icon">&#11088;</div><h4>G2 &amp; TrustRadius</h4><div class="ch-sub">The Validation Signal</div><p>List-style rankings and high review volumes are easily parsed by AI to generate "top vendor" lists and comparison tables. High category placement increases the chances of mentions in AI-generated answers.
+      </p></div>
+    </div>
+  </div>
+</div>
+
+<!-- METRICS -->
+<section id="metrics">
+  <div class="container">
+    <div class="reveal">
+      <h2>Measuring the Invisible</h2>
+      <p class="lead">Metrics like website traffic, click-through rates, lead conversions, and attribution models that credit each channel for its role in a sale are either declining or evaporating. Early touchpoints like clicks on a search ad, blog visits, webinar sign-ups, and demo requests are essentially invisible to the company’s tracking tools. Instead of making “traffic from AI” the north-star metric, since traffic may undercount the impact, focus on AI visibility. This means optimising content to appear in AI answers and tracking the share of voice in AI channels. An interesting flip side to fewer clicks is that the clicks you do get from AI-informed buyers tend to be higher quality.</p>
+    </div>
+    <!-- ICEBERG VIZ -->
+    <div class="reveal" style="margin:56px 0">
+      <div class="iceberg">
+        
+        <!-- Above water: Visible metrics -->
+        <div class="iceberg-above">
+          <div class="iceberg-shape-above">
+            <div class="iceberg-title-above">Visible</div>
+          </div>
+          <div class="iceberg-items-above">
+            <div class="ib-item ib-visible"><span class="ib-dot ib-dot-gray"></span>Website traffic</div>
+            <div class="ib-item ib-visible"><span class="ib-dot ib-dot-gray"></span>Click-through rates</div>
+            <div class="ib-item ib-visible"><span class="ib-dot ib-dot-gray"></span>Demo requests</div>
+            <div class="ib-item ib-visible"><span class="ib-dot ib-dot-gray"></span>Form fills</div>
+          </div>
+        </div>
+
+        <!-- Water surface -->
+        <div class="iceberg-waterline"></div>
+
+        <!-- Below water: Invisible journey -->
+        <div class="iceberg-below">
+          <div class="iceberg-shape-below">
+            <div class="iceberg-title-below">Invisible</div>
+          </div>
+          <div class="iceberg-items-below">
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>AI-answers appearance</div>
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>Brand citations</div>
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>AI-driven comparisons</div>
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>Peer conversations on Reddit &amp; LinkedIn</div>
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>Review aggregation by AI</div>
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>Share of voice in AI channels</div>
+            <div class="ib-item ib-invisible"><span class="ib-dot ib-dot-blue"></span>Brand Sentiment</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:48px">
+      <h3>How to Measure Your AI Visibility</h3>
+      <p style="color:#555;font-size:.95rem;line-height:1.8;margin-bottom:28px">If the funnel is invisible, measurement becomes the first challenge. Here are two practical approaches — start scrappy, then scale up.</p>
+
+      <!-- Option 1: DIY -->
+      <div class="measure-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:var(--white);border:1px solid var(--light-gray);border-radius:16px;padding:32px 28px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;width:100%;height:4px;background:var(--dark)"></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--dark);color:var(--white);font-family:'Playfair Display',serif;font-weight:700;font-size:.85rem;flex-shrink:0">1</span>
+            <h4 style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--dark);margin:0">Measure It Yourself</h4>
+          </div>
+          <p style="font-size:.88rem;color:#555;line-height:1.7;margin-bottom:16px">The fastest way to start — no tools required. Manually query AI platforms with your top category questions and track what comes back.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#444;line-height:1.5"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span>Query ChatGPT, Perplexity, Gemini &amp; Google AI Overview with your top 5 category questions</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#444;line-height:1.5"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span>Screenshot &amp; log which brands appear, in what position, and with what sentiment</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#444;line-height:1.5"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span>Repeat monthly to track changes over time</div>
+          </div>
+          <div style="margin-top:16px;padding:12px 16px;background:rgba(37,71,160,.04);border-radius:10px;font-size:.82rem;color:#666;line-height:1.5"><strong style="color:var(--dark)">Best for:</strong> Getting a quick baseline today. Takes ~30 minutes and costs nothing.</div>
+        </div>
+
+        <!-- Option 2: Dedicated Platforms -->
+        <div style="background:var(--white);border:1px solid var(--blue);border-radius:16px;padding:32px 28px;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(37,71,160,.08)">
+          <div style="position:absolute;top:0;left:0;width:100%;height:4px;background:var(--blue)"></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--blue);color:var(--white);font-family:'Playfair Display',serif;font-weight:700;font-size:.85rem;flex-shrink:0">2</span>
+            <h4 style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--dark);margin:0">Use an AEO/GEO Platform</h4>
+          </div>
+          <p style="font-size:.88rem;color:#555;line-height:1.7;margin-bottom:16px">For ongoing, scalable measurement, dedicated AI visibility platforms automate tracking across multiple AI engines and surface trends you'd miss manually.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#444;line-height:1.5"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span>Continuous monitoring of brand mentions across AI engines</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#444;line-height:1.5"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span>Competitor benchmarking &amp; share-of-voice analytics</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#444;line-height:1.5"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span>Sentiment analysis &amp; citation tracking at scale</div>
+          </div>
+          <p style="font-size:.82rem;color:#777;margin-top:16px;margin-bottom:8px">G2's inaugural AEO category Grid names these as leading platforms:</p>
+          <div class="aeo-bar">
+            <div class="aeo-item">Profound<small>AI Visibility Platform</small></div>
+            <div class="aeo-item">Otterly AI<small>AEO Tracking</small></div>
+            <div class="aeo-item">Scrunch AI<small>AI Search Analytics</small></div>
+            <div class="aeo-item">Semrush<small>GEO Suite</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pullquote pq-center reveal" style="font-style:normal;font-weight:700;color:var(--dark)">Zero-click doesn't mean zero opportunity&mdash;it means the opportunity is shifting to before the click, in the invisible realm of AI.</div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<section class="conclusion">
+  <div class="container reveal">
+    <h2 style="color:#6b8cdf">The funnel is still there! It's just waiting for savvy marketers to shine a light</h2>
+    <p>
+The B2B marketing funnel isn’t broken. It is evolving into something more complex and less visible. Those marketers who cling to the old playbook of easy clicks and traditional SEO may indeed feel like their funnel has collapsed. Whereas, those who embrace the “invisible” funnel, investing in reputation, rich content, and new measures of success, will find that buyers are still flowing through – even if the path they took to your door doesn’t show up on Google Analytics. In the end, what seems invisible is made visible in the outcomes: <strong>higher-intent leads, faster trust-building, and brand preference.</strong> The challenge and opportunity of the AI-driven era is to cultivate these outcomes by being the trusted voice that AI amplifies and buyers seek out. The funnel is still there; it’s just waiting for savvy marketers to shine a light.</p>
+  </div>
+</section>
+
+<!-- ACTION PLAN -->
+<section class="action-section" id="action-plan">
+  <div class="container">
+    <div class="reveal">
+      <h2>So What Now? <span style="color:var(--blue)">Your AI Visibility Action Plan</span></h2>
+      <p class="lead">A prioritized checklist for B2B marketers adapting to the invisible funnel — from quick wins you can do today to long-term strategic investments.</p>
+    </div>
+
+    <div class="action-table-wrap reveal">
+      <table class="action-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Action Item</th>
+            <th>Details</th>
+            <th>Timeframe</th>
+            <th>Priority</th>
+            <th>Effort</th>
+            <th>Why It Matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="col-action">Audit Your AI Visibility</td>
+            <td class="col-details">Query ChatGPT, Perplexity, Gemini &amp; Google AI Overview with your top 5 category questions. Screenshot &amp; log which brands appear.</td>
+            <td><span class="tf-badge tf-week">This Week</span></td>
+            <td><span class="pr-badge pr-critical">Critical</span></td>
+            <td><span class="ef-badge">Low</span></td>
+            <td class="col-why">You can't improve what you haven't measured. This 30-min exercise reveals your baseline.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="col-action">Check Your Review Presence</td>
+            <td class="col-details">Audit your G2 and TrustRadius profiles: review count, rating, category rank. Compare against your top 3 competitors.</td>
+            <td><span class="tf-badge tf-week">This Week</span></td>
+            <td><span class="pr-badge pr-critical">Critical</span></td>
+            <td><span class="ef-badge">Low</span></td>
+            <td class="col-why">AI parses review platforms to generate shortlists. Fewer than 50 reviews = likely invisible.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="col-action">Add "How Did You Hear About Us?" Field</td>
+            <td class="col-details">Add a self-reported attribution dropdown to demo/contact forms. Include options: ChatGPT, Perplexity, AI assistant, Reddit, LinkedIn, podcast.</td>
+            <td><span class="tf-badge tf-week">This Week</span></td>
+            <td><span class="pr-badge pr-critical">Critical</span></td>
+            <td><span class="ef-badge">Low</span></td>
+            <td class="col-why">Captures dark funnel signal immediately. Cheap, fast, and directional.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="col-action">Update robots.txt for LLM Bots</td>
+            <td class="col-details">Ensure your robots.txt does NOT block AI crawlers (GPTBot, Google-Extended, Anthropic, etc.). Add structured data to key pages.</td>
+            <td><span class="tf-badge tf-week">This Week</span></td>
+            <td><span class="pr-badge pr-critical">Critical</span></td>
+            <td><span class="ef-badge">Low</span></td>
+            <td class="col-why">If your site blocks LLM bots, you're invisible by default. This is the technical prerequisite for everything else.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="col-action">Identify One Topic You Can Own</td>
+            <td class="col-details">Find the one category question where your company has a unique answer — proprietary data, contrarian POV, or deep expertise. Plan one authoritative piece.</td>
+            <td><span class="tf-badge tf-month">This Month</span></td>
+            <td><span class="pr-badge pr-high">High</span></td>
+            <td><span class="ef-badge">Medium</span></td>
+            <td class="col-why">This is your first content moat brick. AI cites sources that say something no one else does.</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="col-action">Launch a Structured Review Campaign</td>
+            <td class="col-details">Build a systematic process to request G2/TrustRadius reviews from satisfied customers (post-onboarding, post-renewal, after support wins).</td>
+            <td><span class="tf-badge tf-month">This Month</span></td>
+            <td><span class="pr-badge pr-high">High</span></td>
+            <td><span class="ef-badge">Medium</span></td>
+            <td class="col-why">Review volume directly correlates with AI inclusion in "best of" and comparison responses.</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="col-action">Publish Executive Thought Leadership</td>
+            <td class="col-details">Get your CEO or product leader to publish 1 original POV per month on LinkedIn. Focus on category-level insights, not product pitches.</td>
+            <td><span class="tf-badge tf-month">This Month</span></td>
+            <td><span class="pr-badge pr-high">High</span></td>
+            <td><span class="ef-badge">Medium</span></td>
+            <td class="col-why">Executive voices create the "named entity" association AI uses to build brand-category links.</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td class="col-action">Add Structured Data &amp; FAQ Schema</td>
+            <td class="col-details">Implement JSON-LD structured data (FAQ, HowTo, Organization schema) on your top 10 landing pages and documentation.</td>
+            <td><span class="tf-badge tf-month">This Month</span></td>
+            <td><span class="pr-badge pr-high">High</span></td>
+            <td><span class="ef-badge">Medium</span></td>
+            <td class="col-why">Structured markup helps AI parse and cite your content accurately in synthesized answers.</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td class="col-action">Build a Monthly AI Citation Tracker</td>
+            <td class="col-details">Create a spreadsheet logging brand mentions across AI platforms monthly. Track: query, platform, cited (Y/N), competitors mentioned, sentiment.</td>
+            <td><span class="tf-badge tf-month">This Month</span></td>
+            <td><span class="pr-badge pr-high">High</span></td>
+            <td><span class="ef-badge">Low</span></td>
+            <td class="col-why">Turns a one-time audit into an ongoing measurement system. Shows trends over time.</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td class="col-action">Pitch 1 Earned Media Story Per Quarter</td>
+            <td class="col-details">Target high-trust publications in your category. Focus on data-driven stories or contrarian insights — the kind AI leans on as sources.</td>
+            <td><span class="tf-badge tf-quarter">This Quarter</span></td>
+            <td><span class="pr-badge pr-medium">Medium</span></td>
+            <td><span class="ef-badge">High</span></td>
+            <td class="col-why">Editorial mentions are the strongest "credibility signal" for AI. One major citation compounds.</td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td class="col-action">Create Original Research or Benchmark Report</td>
+            <td class="col-details">Develop a proprietary data asset — annual survey, benchmark report, or industry analysis — that becomes a primary citation source.</td>
+            <td><span class="tf-badge tf-quarter">This Quarter</span></td>
+            <td><span class="pr-badge pr-medium">Medium</span></td>
+            <td><span class="ef-badge">High</span></td>
+            <td class="col-why">The ultimate content moat. Competitors can't replicate your data. AI must cite you as the source.</td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td class="col-action">Activate Reddit &amp; Community Presence</td>
+            <td class="col-details">Identify 3–5 relevant subreddits or communities. Contribute genuinely useful answers (not promotional). Reddit is among the most-cited domains by LLMs.</td>
+            <td><span class="tf-badge tf-quarter">This Quarter</span></td>
+            <td><span class="pr-badge pr-medium">Medium</span></td>
+            <td><span class="ef-badge">Medium</span></td>
+            <td class="col-why">Reddit threads rank in AI training data and retrieval. Authentic presence here compounds quietly.</td>
+          </tr>
+          <tr>
+            <td>13</td>
+            <td class="col-action">Develop a Comprehensive Documentation Hub</td>
+            <td class="col-details">Build detailed how-to guides, tutorials, and implementation docs. Use clear step-by-step structure that AI can easily parse and quote.</td>
+            <td><span class="tf-badge tf-long">6–12 Months</span></td>
+            <td><span class="pr-badge pr-medium">Medium</span></td>
+            <td><span class="ef-badge">High</span></td>
+            <td class="col-why">Documentation is the "precision signal" — AI loves structured, reusable explanations for functional queries.</td>
+          </tr>
+          <tr>
+            <td>14</td>
+            <td class="col-action">Build an Analyst &amp; Influencer Program</td>
+            <td class="col-details">Cultivate relationships with industry analysts and category influencers. Co-create content, offer briefings, support their research.</td>
+            <td><span class="tf-badge tf-long">6–12 Months</span></td>
+            <td><span class="pr-badge pr-medium">Medium</span></td>
+            <td><span class="ef-badge">High</span></td>
+            <td class="col-why">Analyst and influencer mentions create independent "consensus signals" that reinforce your category position.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="action-key reveal">
+      <span><span class="tf-badge tf-week">This Week</span> Do immediately</span>
+      <span><span class="tf-badge tf-month">This Month</span> Build next</span>
+      <span><span class="tf-badge tf-quarter">This Quarter</span> Strategic investment</span>
+      <span><span class="tf-badge tf-long">6–12 Months</span> Long-term play</span>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="author-bar">
+    <div>
+  <h4>Meghana Rangarajan</h4>
+  <p>MBA Candidate, Kellogg School of Management, Northwestern University, IL, USA</p>
+  <a href="mailto:meghanarangarajan@gmail.com">meghanarangarajan@gmail.com</a>
+</div>
+    <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:1.1rem;color:var(--blue)">MEGA MARKETING</div>
+  </div>
+</div>
+<div class="footer"><p><span>MEGA MARKETING</span></p></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);const d=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('progressBar').style.width=(window.scrollY/d*100)+'%'});
+
+// Position orbit nodes at exact 36-degree intervals
+function positionOrbitNodes(){
+  const wrap=document.querySelector('.orbit-wrap');
+  if(!wrap)return;
+  // Skip positioning if on mobile (grid layout takes over)
+  if(window.innerWidth<=600){return}
+  const wrapW=wrap.offsetWidth,wrapH=wrap.offsetHeight;
+  const cx=wrapW/2,cy=wrapH/2;
+  const radius=Math.min(cx,cy)-2;
+  const nodeSize=84;
+  document.querySelectorAll('.sig-node[data-angle]').forEach(node=>{
+    const angle=(+node.dataset.angle-90)*Math.PI/180;
+    const x=cx+radius*Math.cos(angle)-nodeSize/2;
+    const y=cy+radius*Math.sin(angle)-nodeSize/2;
+    node.style.position='absolute';
+    node.style.left=x+'px';
+    node.style.top=y+'px';
+  });
+}
+positionOrbitNodes();
+window.addEventListener('resize',positionOrbitNodes);
+
+// Position consensus nodes at exact 36-degree intervals
+function positionConsensusNodes(){
+  const wrap=document.querySelector('.consensus-wrap');
+  if(!wrap)return;
+  // Skip positioning if on mobile (grid layout takes over)
+  if(window.innerWidth<=600){return}
+  const wrapW=wrap.offsetWidth,wrapH=wrap.offsetHeight;
+  const cx=wrapW/2,cy=wrapH/2;
+  const nodeSize=90;
+  const radius=Math.min(cx,cy)-nodeSize/2-5;
+  document.querySelectorAll('.c-node[data-cangle]').forEach(node=>{
+    const angle=(+node.dataset.cangle-90)*Math.PI/180;
+    const x=cx+radius*Math.cos(angle)-nodeSize/2;
+    const y=cy+radius*Math.sin(angle)-nodeSize/2;
+    node.style.position='absolute';
+    node.style.left=x+'px';
+    node.style.top=y+'px';
+  });
+}
+positionConsensusNodes();
+window.addEventListener('resize',positionConsensusNodes);
+</script>
+</body>
+</html>

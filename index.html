@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEGa Marketing — Decoding Tech & Marketing</title>
+<meta name="description" content="Meghana Rangarajan on the intersection of AI, data, and marketing. A thought-leadership series on how AI is rewriting how brands get found.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --royal:#2547A0;
+    --royal-deep:#1A3578;
+    --near-black:#212020;
+    --periwinkle:#6B8CDF;
+    --body-grey:#555555;
+    --med-grey:#777777;
+    --light-grey:#BFBFBF;
+    --divider:#DEDEDE;
+    --off-white:#FAF9F5;
+    --blue-wash:rgba(37,71,160,0.05);
+    --hero-grad:linear-gradient(160deg,#000000 0%,#0D0D0D 25%,#151520 50%,#121828 75%,#0A1235 100%);
+    --serif:'Playfair Display',Georgia,serif;
+    --sans:'Source Sans 3',-apple-system,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);color:var(--body-grey);background:#fff;line-height:1.8;-webkit-font-smoothing:antialiased;}
+  a{color:var(--royal);text-decoration:none;}
+  img{max-width:100%;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--near-black);line-height:1.2;letter-spacing:-.5px;}
+
+  /* reading progress bar */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;
+    background:linear-gradient(90deg,var(--periwinkle),var(--royal));transition:width .1s ease-out;}
+
+  /* nav */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid transparent;transition:box-shadow .3s,border-color .3s;}
+  header.nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.06);border-color:var(--divider);}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:var(--serif);font-weight:800;font-size:22px;color:var(--near-black);letter-spacing:-.5px;display:flex;align-items:center;gap:2px;}
+  .logo .mega{color:var(--royal);}
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--royal);display:inline-block;margin-left:3px;margin-bottom:2px;align-self:flex-end;}
+  nav ul{list-style:none;display:flex;gap:30px;align-items:center;}
+  nav a{font-family:var(--sans);font-size:15px;color:var(--near-black);font-weight:400;position:relative;padding:4px 0;transition:color .2s;}
+  nav a:hover{color:var(--royal);}
+  nav a::after{content:'';position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--royal);transition:width .25s;}
+  nav a:hover::after{width:100%;}
+  nav a.cta{background:var(--royal);color:#fff;padding:9px 20px;border-radius:100px;font-weight:600;}
+  nav a.cta:hover{background:var(--royal-deep);}
+  nav a.cta::after{display:none;}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px;}
+  .menu-btn span{width:24px;height:2px;background:var(--near-black);transition:.3s;}
+
+  /* hero */
+  .hero{background:var(--hero-grad);color:#fff;position:relative;overflow:hidden;
+    min-height:100vh;min-height:100svh;display:flex;align-items:center;
+    padding:clamp(96px,14vh,150px) clamp(20px,5vw,44px) clamp(64px,9vh,120px);}
+  .hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(37,71,160,.3),var(--royal),rgba(37,71,160,.3),transparent);}
+  .hero-inner{max-width:var(--maxw);margin:0 auto;width:100%;}
+  .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:1.6px;font-size:clamp(11px,1.1vw,13px);font-weight:600;
+    color:var(--periwinkle);margin-bottom:clamp(16px,2vw,24px);}
+  .hero h1{color:#fff;font-size:clamp(2.15rem,6vw,3.95rem);font-weight:800;line-height:1.08;letter-spacing:-0.03em;max-width:15ch;}
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--periwinkle);}
+  .hero p.lead{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.05rem,1.6vw,1.4rem);color:rgba(255,255,255,.82);
+    margin-top:clamp(18px,2.4vw,28px);max-width:56ch;line-height:1.6;}
+  .hero-actions{margin-top:clamp(28px,4vw,42px);display:flex;gap:16px;flex-wrap:wrap;}
+  .btn{display:inline-block;padding:14px 30px;border-radius:100px;font-family:var(--sans);font-weight:600;font-size:15px;
+    transition:transform .2s,box-shadow .2s,background .2s;cursor:pointer;border:none;}
+  .btn-primary{background:var(--royal);color:#fff;}
+  .btn-primary:hover{background:#2e56c0;transform:translateY(-2px);box-shadow:0 10px 30px rgba(37,71,160,.4);}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);}
+  .btn-ghost:hover{border-color:#fff;transform:translateY(-2px);}
+
+  /* sections */
+  section{padding:100px 28px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;}
+  .section-head{margin-bottom:52px;max-width:64ch;}
+  .section-head .kicker{text-transform:uppercase;letter-spacing:1.5px;font-size:12px;font-weight:600;color:var(--royal);margin-bottom:14px;}
+  .section-head h2{font-size:40px;font-weight:700;letter-spacing:-.8px;}
+  .section-head h2 em{font-style:italic;font-weight:400;color:var(--periwinkle);}
+  .section-head p{margin-top:14px;font-size:17.5px;color:var(--body-grey);}
+
+  .alt{background:var(--off-white);}
+
+  /* feature cards (AI series) */
+  .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .feature{background:#fff;border:1px solid var(--divider);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .25s,box-shadow .25s;}
+  .feature:hover{transform:translateY(-6px);box-shadow:0 20px 44px rgba(20,24,40,.12);}
+  .feature .thumb{height:170px;background:var(--hero-grad);position:relative;display:flex;align-items:flex-end;padding:18px 22px;}
+  .feature .thumb.two{background:linear-gradient(150deg,#0A1235,#1A3578 70%,#2547A0);}
+  .feature .thumb .num{position:absolute;top:14px;right:20px;font-family:var(--serif);font-weight:800;font-size:40px;color:rgba(255,255,255,.16);}
+  .badge{display:inline-block;background:var(--royal);color:#fff;text-transform:uppercase;letter-spacing:1px;font-size:11px;
+    font-weight:600;padding:5px 13px;border-radius:100px;}
+  .badge.light{background:rgba(255,255,255,.14);backdrop-filter:blur(4px);}
+  .feature .body{padding:26px 24px 28px;display:flex;flex-direction:column;flex:1;}
+  .feature h3{font-size:24px;font-weight:700;line-height:1.28;margin-bottom:12px;}
+  .feature h3 a{color:var(--near-black);}
+  .feature h3 a:hover{color:var(--royal);}
+  .feature .standfirst{font-size:16.5px;color:var(--body-grey);flex:1;}
+  .feature .meta{margin-top:18px;display:flex;align-items:center;justify-content:space-between;font-size:13.5px;color:var(--med-grey);}
+  .readlink{font-weight:600;color:var(--royal);display:inline-flex;align-items:center;gap:6px;}
+  .readlink svg{transition:transform .2s;}
+  .feature:hover .readlink svg{transform:translateX(4px);}
+
+  /* insights archive */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:38px;}
+  .pill{font-family:var(--sans);font-size:14px;font-weight:600;padding:8px 18px;border-radius:100px;border:1px solid var(--divider);
+    background:#fff;color:var(--body-grey);cursor:pointer;transition:.2s;}
+  .pill:hover{border-color:var(--royal);color:var(--royal);}
+  .pill.active{background:var(--royal);border-color:var(--royal);color:#fff;}
+  .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .card{background:#fff;border:1px solid var(--divider);border-radius:12px;padding:26px 24px;display:flex;flex-direction:column;
+    transition:transform .25s,box-shadow .25s,border-color .25s;min-height:200px;}
+  .card:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(20,24,40,.10);border-color:#cfd8ee;}
+  .card .toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+  .tag{text-transform:uppercase;letter-spacing:.9px;font-size:10.5px;font-weight:600;color:var(--royal);
+    background:var(--blue-wash);padding:5px 11px;border-radius:100px;white-space:nowrap;}
+  .ext{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--med-grey);font-style:italic;white-space:nowrap;}
+  a.ext:hover{color:var(--royal);}
+  .card h4{font-size:19px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+  .card h4 a{color:var(--near-black);}
+  .card h4 a:hover{color:var(--royal);}
+  .card .cardblurb{font-size:14.5px;color:var(--body-grey);line-height:1.62;margin:0;}
+
+  /* about */
+  .about{background:var(--hero-grad);color:#fff;}
+  .about-inner{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:center;}
+  .about h2{color:#fff;font-size:40px;font-weight:700;letter-spacing:-.8px;margin-bottom:22px;}
+  .about h2 em{font-style:italic;font-weight:400;color:var(--periwinkle);}
+  .about p{color:rgba(255,255,255,.82);font-size:17.5px;margin-bottom:18px;}
+  .about .btn{margin-top:12px;}
+  .portrait{aspect-ratio:1;border-radius:16px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.14);background:linear-gradient(150deg,#151520,#1A3578);
+    display:flex;align-items:center;justify-content:center;}
+  .portrait img{width:100%;height:100%;object-fit:cover;display:block;}
+  .portrait .mono{font-family:var(--serif);font-weight:800;font-size:84px;color:rgba(255,255,255,.9);letter-spacing:-3px;}
+  .stat-row{display:flex;gap:38px;margin:26px 0 4px;flex-wrap:wrap;}
+  .stat .n{font-family:var(--serif);font-weight:800;font-size:40px;color:var(--periwinkle);line-height:1;}
+  .stat .l{font-size:13.5px;color:rgba(255,255,255,.62);margin-top:6px;}
+
+  /* contact */
+  .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+  .contact-copy h2{font-size:40px;font-weight:700;letter-spacing:-.8px;margin-bottom:16px;}
+  .contact-copy h2 em{font-style:italic;font-weight:400;color:var(--periwinkle);}
+  .contact-copy p{font-size:17.5px;}
+  .contact-copy .direct{margin-top:24px;font-size:15.5px;color:var(--med-grey);}
+  .contact-copy .direct a{font-weight:600;}
+  form{background:#fff;border:1px solid var(--divider);border-radius:14px;padding:32px;box-shadow:0 10px 30px rgba(20,24,40,.05);}
+  .field{margin-bottom:18px;}
+  label{display:block;font-size:13.5px;font-weight:600;color:var(--near-black);margin-bottom:7px;}
+  input,textarea{width:100%;font-family:var(--sans);font-size:15.5px;color:var(--near-black);padding:12px 14px;
+    border:1px solid var(--divider);border-radius:9px;background:#fdfdfd;transition:border-color .2s,box-shadow .2s;}
+  input:focus,textarea:focus{outline:none;border-color:var(--royal);box-shadow:0 0 0 3px rgba(37,71,160,.12);}
+  textarea{resize:vertical;min-height:120px;}
+  .form-note{font-size:12.5px;color:var(--med-grey);margin-top:6px;font-style:italic;}
+  form .btn-primary{width:100%;margin-top:6px;}
+
+  /* footer */
+  footer{background:#0A0D15;color:rgba(255,255,255,.6);padding:60px 28px 34px;}
+  .foot-inner{max-width:var(--maxw);margin:0 auto;display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;
+    border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:34px;}
+  .foot-inner .logo{color:#fff;}
+  .foot-cols{display:flex;gap:60px;flex-wrap:wrap;}
+  .foot-col h5{font-family:var(--sans);text-transform:uppercase;letter-spacing:1px;font-size:11px;color:rgba(255,255,255,.4);margin-bottom:14px;}
+  .foot-col a{display:block;color:rgba(255,255,255,.72);font-size:14.5px;margin-bottom:9px;}
+  .foot-col a:hover{color:#fff;}
+  .copyright{max-width:var(--maxw);margin:24px auto 0;font-size:13px;color:rgba(255,255,255,.4);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* proto banner */
+  .proto{position:fixed;bottom:16px;right:16px;z-index:150;background:var(--near-black);color:#fff;font-size:12px;
+    padding:8px 14px;border-radius:100px;font-family:var(--sans);opacity:.85;box-shadow:0 6px 20px rgba(0,0,0,.3);}
+  .proto b{color:var(--periwinkle);}
+
+  /* responsive */
+  @media(max-width:900px){
+    .feature-grid,.card-grid,.about-inner,.contact-inner{grid-template-columns:1fr;}
+    .section-head h2,.about h2,.contact-copy h2{font-size:31px;}
+    nav ul{position:fixed;top:0;right:0;height:100vh;width:74%;max-width:320px;background:#fff;flex-direction:column;
+      align-items:flex-start;gap:8px;padding:100px 34px;transform:translateX(100%);transition:transform .32s;box-shadow:-10px 0 40px rgba(0,0,0,.12);}
+    nav ul.open{transform:none;}
+    nav a{font-size:19px;padding:10px 0;}
+    .menu-btn{display:flex;z-index:110;}
+    .about-inner{gap:34px;}
+    .portrait{max-width:280px;}
+  }
+  @media(max-width:560px){
+    section{padding:70px 22px;}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo"><span class="mega">MEG</span>a Marketing<span class="dot"></span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav>
+      <ul id="navlist">
+        <li><a href="#ai">AI for Marketing</a></li>
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact" class="cta">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Decoding tech &amp; marketing</div>
+    <h1>Making sense of <em>marketing</em> in a world run by <em>algorithms.</em></h1>
+    <p class="lead">I'm Meghana Rangarajan. I write about the place where AI, data, and marketing collide, and what it means for how brands actually get found, chosen, and remembered.</p>
+    <div class="hero-actions">
+      <a href="#ai" class="btn btn-primary">Read the AI for Marketing series</a>
+      <a href="#about" class="btn btn-ghost">About me</a>
+    </div>
+  </div>
+</section>
+
+<!-- AI FOR MARKETING (flagship) -->
+<section id="ai">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The flagship series</div>
+      <h2>AI for <em>Marketing</em></h2>
+      <p>An ongoing series on how generative AI is rewriting discovery, advertising, and trust. This is the sharpest of what I'm thinking about right now.</p>
+    </div>
+    <div class="feature-grid">
+      <article class="feature reveal">
+        <div class="thumb"><span class="num">01</span><span class="badge light">AI &amp; Marketing</span></div>
+        <div class="body">
+          <h3><a href="ai-visibility/">Did AI break the B2B funnel, or just make it invisible?</a></h3>
+          <p class="standfirst">The familiar awareness-to-decision funnel is vanishing from your dashboards. It hasn't disappeared. It has gone invisible, and that changes how B2B buyers really discover you.</p>
+          <div class="meta">
+            <span>Aug 2026 · 9 min read</span>
+            <a class="readlink" href="ai-visibility/">Read<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+      </article>
+      <article class="feature reveal">
+        <div class="thumb two"><span class="num">02</span><span class="badge light">AI &amp; Marketing</span></div>
+        <div class="body">
+          <h3><a href="ai-advertising/">In the AI era, the best ad is not being an ad</a></h3>
+          <p class="standfirst">AI marketing is splitting into two worlds: paying to show up below the answer, or earning your way into the answer itself. Here's why the organic path is the smarter ROI play for consumer brands.</p>
+          <div class="meta">
+            <span>Jul 2026 · 7 min read</span>
+            <a class="readlink" href="ai-advertising/">Read <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS ARCHIVE -->
+<section id="insights" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The archive</div>
+      <h2>Insights</h2>
+      <p>Everything else, in one place. Frameworks, case studies, data breakdowns, and market research. Filter by what you're after. Pieces marked with an arrow open on the platform where they were first published.</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="pill active" data-filter="all">All</button>
+      <button class="pill" data-filter="case-study">Case Studies</button>
+      <button class="pill" data-filter="framework">Frameworks</button>
+      <button class="pill" data-filter="data">Data</button>
+      <button class="pill" data-filter="research">Market Research</button>
+    </div>
+    <div class="card-grid" id="cards">
+
+      <article class="card reveal" data-cat="data">
+        <div class="toprow"><span class="tag">Data</span><a class="ext" href="https://medium.com/@meghanarangarajan/rfm-analysis-a-customer-segmentation-strategy-when-what-how-why-7bb6132c3ca3" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/rfm-analysis-a-customer-segmentation-strategy-when-what-how-why-7bb6132c3ca3" target="_blank" rel="noopener">RFM analysis: the customers worth keeping</a></h4>
+        <p class="cardblurb">How to segment customers by Recency, Frequency and Monetary value to predict who buys next, so you reward your best customers, win back lapsing ones, and focus retention spend where it counts.</p>
+      </article>
+
+      <article class="card reveal" data-cat="data">
+        <div class="toprow"><span class="tag">Data</span><a class="ext" href="https://medium.com/@meghanarangarajan/zip-code-segmentation-a-cookieless-solution-d6d32811fa6" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/zip-code-segmentation-a-cookieless-solution-d6d32811fa6" target="_blank" rel="noopener">Zip-code segmentation: targeting without cookies</a></h4>
+        <p class="cardblurb">A cookieless approach that segments markets by zip code and competitive density into four distinct clusters, each with its own play, so you can allocate spend and tailor messaging without third-party cookies.</p>
+      </article>
+
+      <article class="card reveal" data-cat="data">
+        <div class="toprow"><span class="tag">Data</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_brand-lift-study-activity-7165623167175118848-t4xR/" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_brand-lift-study-activity-7165623167175118848-t4xR/" target="_blank" rel="noopener">Proof over vanity metrics: A/B testing done right</a></h4>
+        <p class="cardblurb">A practical look at using A/B tests and brand-lift studies to prove what your campaigns actually move, so you optimise on real incremental impact rather than surface metrics like clicks and impressions.</p>
+      </article>
+
+      <article class="card reveal" data-cat="case-study">
+        <div class="toprow"><span class="tag">Case Study</span><a class="ext" href="https://medium.com/miq-tech-and-analytics/contextual-targeting-during-the-fifa-world-cup-bb9fa9d7b807" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/miq-tech-and-analytics/contextual-targeting-during-the-fifa-world-cup-bb9fa9d7b807" target="_blank" rel="noopener">Winning the World Cup without cookies</a></h4>
+        <p class="cardblurb">How contextual targeting, powered by rich audience data, reached engaged fans during the 2022 World Cup, lifting campaign scale up to four times higher and cutting costs by as much as 66%, all privacy-safe.</p>
+      </article>
+
+      <article class="card reveal" data-cat="case-study">
+        <div class="toprow"><span class="tag">Case Study</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_digital-strategy-google-activity-7041684617917050880-4Tmh" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_digital-strategy-google-activity-7041684617917050880-4Tmh" target="_blank" rel="noopener">Turning Oscars night into ad gold</a></h4>
+        <p class="cardblurb">Cultural tentpoles like the Oscars are a goldmine for marketers who plan ahead. How to ride a major cultural moment with timely, relevant digital ad campaigns that meet audiences where their attention already is.</p>
+      </article>
+
+      <article class="card reveal" data-cat="case-study">
+        <div class="toprow"><span class="tag">Case Study</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_retargeting-marketing-programmaticadvertising-activity-7102237297445650432-88uY" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_retargeting-marketing-programmaticadvertising-activity-7102237297445650432-88uY" target="_blank" rel="noopener">The art of the WhatsApp retarget</a></h4>
+        <p class="cardblurb">Retargeting on WhatsApp is personal, immediate and easy to get wrong. A guide to crafting conversational messages that feel helpful rather than intrusive, and that nudge warm prospects towards a purchase.</p>
+      </article>
+
+      <article class="card reveal" data-cat="case-study">
+        <div class="toprow"><span class="tag">Case Study</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_what-can-brands-do-for-the-pride-activity-7066424232192147456-tTEV" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_what-can-brands-do-for-the-pride-activity-7066424232192147456-tTEV" target="_blank" rel="noopener">Pride, beyond the rainbow logo</a></h4>
+        <p class="cardblurb">Consumers spot rainbow-washing instantly. How brands can show up during Pride with genuine, year-round commitment and substance, rather than a temporary logo change that rings hollow.</p>
+      </article>
+
+      <article class="card reveal" data-cat="case-study">
+        <div class="toprow"><span class="tag">Case Study</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_accessibility-tech-activity-7283135431875969024-BiV_/" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_accessibility-tech-activity-7283135431875969024-BiV_/" target="_blank" rel="noopener">How Big Tech is designing for everyone</a></h4>
+        <p class="cardblurb">A look at how the biggest technology companies are building accessibility and inclusion into their products, and what their choices signal for brands that want to serve every user rather than an average one.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://medium.com/@meghanarangarajan/how-do-you-create-an-effective-branding-strategy-baa17a7d34f5" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/how-do-you-create-an-effective-branding-strategy-baa17a7d34f5" target="_blank" rel="noopener">Building a brand that outlasts its logo</a></h4>
+        <p class="cardblurb">Branding is far more than a logo and a palette. Seven building blocks, from defining your brand and audience to staying consistent across every touchpoint, that together earn loyalty and set you apart.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_marketing-beautyindustry-strategy-activity-7167832596616347648-UJ14" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_marketing-beautyindustry-strategy-activity-7167832596616347648-UJ14" target="_blank" rel="noopener">What Aristotle can teach you about marketing</a></h4>
+        <p class="cardblurb">Aristotle's ethos, pathos and logos still underpin the most persuasive marketing. How to blend credibility, emotion and logic, with examples from the beauty industry, to make brand messaging genuinely move people.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_user-generated-content-camapigns-activity-7099608627723862016-yBMY" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_user-generated-content-camapigns-activity-7099608627723862016-yBMY" target="_blank" rel="noopener">Your customers make your best content</a></h4>
+        <p class="cardblurb">Why user-generated content is one of the most trusted and cost-effective assets a brand has, and how to source, curate and deploy it across campaigns to build authenticity and social proof at scale.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://medium.com/business-talks/how-can-qr-codes-be-used-for-marketing-c3fa9783481" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/business-talks/how-can-qr-codes-be-used-for-marketing-c3fa9783481" target="_blank" rel="noopener">Is the QR code the new click?</a></h4>
+        <p class="cardblurb">Once written off, QR codes now bridge the offline and online worlds and speed up conversion. This piece argues they work best as a connective, trackable complement to your channels rather than a standalone play.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://medium.com/@meghanarangarajan/sustainability-in-marketing-and-advertising-a8d6987a1710" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/sustainability-in-marketing-and-advertising-a8d6987a1710" target="_blank" rel="noopener">The hidden carbon cost of your campaigns</a></h4>
+        <p class="cardblurb">Digital marketing carries a hidden carbon cost that rivals air travel. A practical case for greener practices, from cleaner data and ad-fraud prevention to honest reporting, that cut emissions while building trust.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://medium.com/@meghanarangarajan/unveiling-the-trends-of-affiliate-marketing-260d0005e48d" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/unveiling-the-trends-of-affiliate-marketing-260d0005e48d" target="_blank" rel="noopener">Where affiliate marketing goes next</a></h4>
+        <p class="cardblurb">The five forces reshaping affiliate marketing, from AI automation and performance-based pay to more diverse content, influencer partnerships and stronger SEO. A field guide to keeping an affiliate programme competitive.</p>
+      </article>
+
+      <article class="card reveal" data-cat="framework">
+        <div class="toprow"><span class="tag">Framework</span><a class="ext" href="https://medium.com/@meghanarangarajan/5-steps-of-the-consumer-purchase-journey-every-marketer-needs-to-know-592e49fbfa2f" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/5-steps-of-the-consumer-purchase-journey-every-marketer-needs-to-know-592e49fbfa2f" target="_blank" rel="noopener">The five stops on every buyer's journey</a></h4>
+        <p class="cardblurb">The five stages every shopper moves through, from awareness to post-purchase, and how to market to each one. A reminder that the sale is the middle of the journey, not the end.</p>
+      </article>
+
+      <article class="card reveal" data-cat="research">
+        <div class="toprow"><span class="tag">Market Research</span><a class="ext" href="https://www.notion.so/a89eba8f542140a897fefa48974b811e" target="_blank" rel="noopener">Notion <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.notion.so/a89eba8f542140a897fefa48974b811e" target="_blank" rel="noopener">How America shopped: Holiday 2023</a></h4>
+        <p class="cardblurb">A data-led read on how Americans shopped over the 2023 holiday season, and what shifting budgets, timing and channel preferences meant for marketers planning their peak-season campaigns.</p>
+      </article>
+
+      <article class="card reveal" data-cat="research">
+        <div class="toprow"><span class="tag">Market Research</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan_data-ecommerce-planning-activity-7024042181812248576-b19e" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan_data-ecommerce-planning-activity-7024042181812248576-b19e" target="_blank" rel="noopener">The data behind Valentine's Day 2023</a></h4>
+        <p class="cardblurb">A data snapshot of how consumers spent and shopped around Valentine's Day 2023, and how marketers can read those signals to plan sharper, better-timed seasonal campaigns.</p>
+      </article>
+
+      <article class="card reveal" data-cat="research">
+        <div class="toprow"><span class="tag">Market Research</span><a class="ext" href="https://medium.com/@meghanarangarajan/us-holiday-season-shopping-2022-b5870465066a" target="_blank" rel="noopener">Medium <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://medium.com/@meghanarangarajan/us-holiday-season-shopping-2022-b5870465066a" target="_blank" rel="noopener">Holiday 2022: the year of the bargain hunter</a></h4>
+        <p class="cardblurb">How 2022's holiday shopping was shaped by inflation and bargain-hunting, with 75% of shoppers actively chasing a deal. The takeaway: promote early, lean into in-store experiences, and court value over loyalty.</p>
+      </article>
+
+      <article class="card reveal" data-cat="research">
+        <div class="toprow"><span class="tag">Market Research</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan-8280951a0_travel-businessanalytics-holidayseason-activity-7001631578091134976-EZE7" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan-8280951a0_travel-businessanalytics-holidayseason-activity-7001631578091134976-EZE7" target="_blank" rel="noopener">The first restriction-free getaway</a></h4>
+        <p class="cardblurb">The first restriction-free holiday travel season after the pandemic, and what the surge meant for brands. A data look at where and how people travelled, and the marketing openings it opened up.</p>
+      </article>
+
+      <article class="card reveal" data-cat="research">
+        <div class="toprow"><span class="tag">Market Research</span><a class="ext" href="https://www.linkedin.com/posts/meghana-rangarajan-8280951a0_travel-businessanalytics-holidayseason-activity-7001631578091134976-EZE7" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+        <h4><a href="https://www.linkedin.com/posts/meghana-rangarajan-8280951a0_travel-businessanalytics-holidayseason-activity-7001631578091134976-EZE7" target="_blank" rel="noopener">2022, India wrapped</a></h4>
+        <p class="cardblurb">A year-in-review recap of India's biggest consumer, travel and marketing moments of 2022, pulling the year's data into one snapshot of how the market moved.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="wrap about-inner">
+    <div class="reveal">
+      <h2>From integrated circuits to <em>integrated campaigns.</em></h2>
+      <p>I started in electronics engineering in Bangalore, liked the technical side, but wanted something more creative. That's how I moved from circuits to campaigns.</p>
+      <p>Since then: nearly five years at MiQ taking ad-tech products from zero to multi-million-dollar revenue across the North American market, an MBA at Kellogg, and a summer with Adobe's marketing org where I led a B2B pilot of their LLM Optimizer and built a framework for how brands show up across AI search. That work is why this whole site now leads with AI.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="n">150K+</div><div class="l">Content impressions</div></div>
+        <div class="stat"><div class="n">4.5 yrs</div><div class="l">Ad-tech GTM</div></div>
+        <div class="stat"><div class="n">2026</div><div class="l">Kellogg MBA</div></div>
+      </div>
+      <a href="#contact" class="btn btn-primary">Get in touch</a>
+    </div>
+    <div class="portrait reveal"><img src="images/Headshot.JPG" alt="Meghana Rangarajan"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap contact-inner">
+    <div class="contact-copy reveal">
+      <h2>Let's <em>talk.</em></h2>
+      <p>Whether it's a role, a collaboration, or a conversation about where AI and marketing are heading, I'd love to hear from you.</p>
+      <div class="direct">Or reach me directly at <a href="#">meghanarangarajan@gmail.com</a> and on <a href="#">LinkedIn</a>.</div>
+    </div>
+    <form onsubmit="return false;">
+      <div class="field"><label>Name</label><input type="text" placeholder="Your name"></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="you@company.com"></div>
+      <div class="field"><label>Message</label><textarea placeholder="What's on your mind?"></textarea></div>
+      <button class="btn btn-primary" type="submit">Send message</button>
+      <div class="form-note">In the live site this posts through Netlify Forms, no backend, submissions land in your dashboard and inbox.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="logo"><span class="mega" style="color:var(--periwinkle)">MEG</span>a Marketing</div>
+      <p style="margin-top:14px;max-width:34ch;font-size:14.5px;">Decoding the world of tech and marketing, one piece at a time.</p>
+    </div>
+    <div class="foot-cols">
+      <div class="foot-col">
+        <h5>Read</h5>
+        <a href="#ai">AI for Marketing</a>
+        <a href="#insights">Insights</a>
+      </div>
+      <div class="foot-col">
+        <h5>More</h5>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Elsewhere</h5>
+        <a href="#">LinkedIn</a>
+        <a href="#">Medium</a>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    <span>© 2026 Meghana Rangarajan · MEGa Marketing</span>
+    <span>Built as static HTML</span>
+  </div>
+</footer>
+
+<div class="proto">Prototype · <b>design direction</b>, not final copy</div>
+
+<script>
+  // progress bar + nav shadow
+  const prog=document.getElementById('progress'),nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement,st=h.scrollTop,sh=h.scrollHeight-h.clientHeight;
+    prog.style.width=(st/sh*100)+'%';
+    nav.classList.toggle('scrolled',st>20);
+  });
+  // mobile menu
+  const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlist');
+  mb.addEventListener('click',()=>nl.classList.toggle('open'));
+  nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nl.classList.remove('open')));
+  // tag filter
+  const cards=[...document.querySelectorAll('#cards .card')];
+  document.querySelectorAll('#filters .pill').forEach(p=>{
+    p.addEventListener('click',()=>{
+      document.querySelectorAll('#filters .pill').forEach(x=>x.classList.remove('active'));
+      p.classList.add('active');
+      const f=p.dataset.filter;
+      cards.forEach(c=>{
+        const show=f==='all'||c.dataset.cat===f;
+        c.style.display=show?'flex':'none';
+      });
+    });
+  });
+  // scroll reveal
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
